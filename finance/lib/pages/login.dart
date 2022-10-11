@@ -81,8 +81,9 @@ class _FinanceForm extends State<FinanceForm> {
 
                         var result = await authBloc.GetTokenId(
                             passwordValue, emailValue);
+                        var result2 = await authBloc.GetExpenses();
+                        if (result && result2) {
 
-                        if (result) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(

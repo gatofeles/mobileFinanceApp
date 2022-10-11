@@ -6,16 +6,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/card.dart' show ECard;
 import '../components/expenseForm.dart' ;
 
-class Expenses extends StatelessWidget {
-  const Expenses({super.key});
+
+class Expenses extends StatefulWidget {
+  const Expenses({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<Expenses> createState() => ExpensesState();
+}
+
+
+class ExpensesState extends State<Expenses> {
+
+  @override
+  Widget build(BuildContext context){
     AuthBloc authBloc = context.watch<AuthBloc>();
-    List<ECard> expenses = [];
-    authBloc.state.expenses!.forEach((expense) {
-      expenses.add(ECard(card: expense));
-    });
+    CardForm cardForm = CardForm(token: authBloc.state.token, userId: authBloc.state.userId);
     return MaterialApp(
       title: 'Despesas',
       home: Scaffold(
@@ -23,9 +28,9 @@ class Expenses extends StatelessWidget {
           title: const Text('Despesas'),
         ),
         body: Column(
-          children: [CardForm() ,Expanded(child: GridView.count(
+          children: [cardForm ,Expanded(child: GridView.count(
           crossAxisCount: 3,
-          children: expenses,
+          children: authBloc.state.expenses!,
         )) ],) 
       ),
     );
