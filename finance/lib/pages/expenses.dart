@@ -1,8 +1,10 @@
+import 'package:finance/utils/httpHelper.dart';
 import 'package:flutter/material.dart';
 import '../blocs/authBloc.dart';
 import '../blocs/expensesBloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/card.dart' show ECard;
+import '../components/expenseForm.dart' ;
 
 class Expenses extends StatelessWidget {
   const Expenses({super.key});
@@ -10,16 +12,21 @@ class Expenses extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthBloc authBloc = context.watch<AuthBloc>();
-    
+    List<ECard> expenses = [];
+    authBloc.state.expenses!.forEach((expense) {
+      expenses.add(ECard(card: expense));
+    });
     return MaterialApp(
-      title: 'Welcome to Flutter',
+      title: 'Despesas',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Welcome to Flutter'),
+          title: const Text('Despesas'),
         ),
         body: Column(
-          children:[ECard(title:'Tomate',description: 'Tomato', date: '20/20/2020',value:'25')],
-        ),
+          children: [CardForm() ,Expanded(child: GridView.count(
+          crossAxisCount: 3,
+          children: expenses,
+        )) ],) 
       ),
     );
   }

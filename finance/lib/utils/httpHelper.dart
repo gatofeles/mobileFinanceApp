@@ -3,35 +3,34 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-class Card{
- 
+class ICard {
+  ICard(this.title, this.cost, this.description, this.date, this._id);
+  String _id;
+  String title;
+  String cost;
+  String description;
+  String date;
 
-  Card(this.title, this.cost, this.description, this.date, this._id);
-    String _id; 
-    String title;
-    String cost;
-    String description;
-    String date;
-
-  factory Card.fromJson(Map<String, dynamic> json) {
-    return Card(json['title'] as String,  json['cost'].toString(),  json['description'] as String, json['date'] as String, json['_id'] as String);
+  factory ICard.fromJson(Map<String, dynamic> json) {
+    return ICard(
+        json['title'] as String,
+        json['cost'].toString(),
+        json['description'] as String,
+        json['date'] as String,
+        json['_id'] as String);
   }
-
 }
 
-class Creds{
+class Creds {
   final String email;
   final String password;
-  
+
   Creds(this.email, this.password);
 
-  Map<String, dynamic> toJson() => {
-            "email": email,
-            "password":password
-          };
+  Map<String, dynamic> toJson() => {"email": email, "password": password};
 }
 
-class User{
+class User {
   final String userId;
   final String token;
 
@@ -40,53 +39,39 @@ class User{
   factory User.fromJson(Map<String, dynamic> json) {
     return User(json['userId'], json['token']);
   }
-
 }
 
-class HttpHelper{
-
+class HttpHelper {
   var backEnd = "https://financeappback.herokuapp.com/";
 
   var client = http.Client();
-   Map<String, String> requestHeaders = {
-       'x-auth-token': ''
-     };
-  
-  
-  Future<List<Card>> GetAllExpesenses(String userId, String token) async {
+  Map<String, String> requestHeaders = {'x-auth-token': ''};
+
+  Future<List<ICard>> GetAllExpesenses(String userId, String token) async {
     requestHeaders['x-auth-token'] = token;
 
     final response = await client.get(
-      Uri.parse(backEnd+"transactions/trans/${userId}"),
-      headers: requestHeaders
-    );
+        Uri.parse(backEnd + "transactions/trans/${userId}"),
+        headers: requestHeaders);
 
     Map expenses = jsonDecode(response.body);
-    List<Card> cards = [];
+    List<ICard> cards = [];
 
     expenses.forEach((key, value) {
-      value.forEach((card){
-        cards.add(Card.fromJson(card));
-
+      value.forEach((card) {
+        cards.add(ICard.fromJson(card));
       });
-     });
+    });
 
     return cards;
-
   }
 
-  Future<User> GetCreds(String email, String password) async{
-    
+  Future<User> GetCreds(String email, String password) async {
     var creds = Creds(email, password);
 
-    final response = await client.post(
-      Uri.parse(backEnd+"users/login"),
-      headers: requestHeaders,
-      body: creds.toJson()
-    );
+    final response = await client.post(Uri.parse(backEnd + "users/login"),
+        headers: requestHeaders, body: creds.toJson());
 
     return User.fromJson(jsonDecode(response.body));
   }
-
-
 }
