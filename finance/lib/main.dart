@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import './pages/login.dart';
 import './blocs/authBloc.dart';
-import './blocs/expensesBloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
@@ -14,8 +13,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MultiBlocProvider(
-     providers: [BlocProvider(create:(context) => AuthBloc('', '')), BlocProvider(create:(context) => ExpenseBloc('',''))],
+    return BlocProvider(
+    create:(context) => AuthBloc('', ''),
 
     child: MaterialApp(
       title: 'Finance App',
