@@ -86,9 +86,14 @@ class CardFormState extends State<CardForm> {
                       const SnackBar(content: Text('Processando')),
                     );
                     ExpenseBody card = ExpenseBody(titleController.text, costController.text, dateController.text, authBloc.state.userId);
-                    if(await http.CreateExpense(card, authBloc.state.token)){
+                    if(await http.CreateExpense(card, authBloc.state.token) ){
+                      var result = await authBloc.GetExpenses();
+                      var message = "algo deu errado";
+                      if(result){
+                          message = 'Despesa Criada com Sucesso!';
+                      }
                       ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Despesa Criada com Sucesso!')),
+                       SnackBar(content: Text(message)),
                     );
                     }
 

@@ -10,8 +10,9 @@ class AuthState {
   String userId;
   bool looged;
   List<ECard>? expenses;
+  List<ICard>? data;
   AuthState(
-      {this.token = '', this.userId = '', this.looged = false, this.expenses});
+      {this.token = '', this.userId = '', this.looged = false, this.expenses, this.data});
 }
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -37,6 +38,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(AuthState(expenses: expensesIn));
       }
     });
+  }
+
+  void LogOut(){
+    emit(AuthState(expenses: [], userId: '', token: '', data:[]));
   }
 
   Future<bool> GetTokenId(String password, String email) async {
@@ -68,12 +73,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           cards.forEach((expense) {
               expensesIn.add(ECard(card: expense));
           });
-          emit(AuthState(expenses: expensesIn, userId: this.state.userId, token: this.state.token));
+          emit(AuthState(expenses: expensesIn, userId: this.state.userId, token: this.state.token, data:cards));
           return true;
     } catch (e) {
       return false;
     }
           
+  }
+ 
+  List<double> OrganizeByMonth(){
+    List<double> total = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+    this.state.data!.forEach((element) {
+      var month = int.parse(element.date.split('/')[1]);
+      var cost = double.parse(element.cost);
+      total[month-1] += cost;
+     });
+
+    return total;
   }
 
 }

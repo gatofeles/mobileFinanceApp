@@ -19,6 +19,8 @@ class ICard {
         json['date'] as String,
         json['_id'] as String);
   }
+
+  Map<String, dynamic> toJson() => {"_id":_id, "title": title, "cost": cost, "date":date, "description":description};
 }
 
 
@@ -95,6 +97,20 @@ class HttpHelper {
     requestHeaders['x-auth-token'] = token;
     
     final response = await client.post(Uri.parse(backEnd + "transactions"),
+        headers: requestHeaders, body: card.toJson());
+
+    if(response.statusCode == 200){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  Future<bool> DeleteExpense(ICard card, String token) async {
+    requestHeaders['x-auth-token'] = token;
+    
+    final response = await client.delete(Uri.parse(backEnd + "transactions"),
         headers: requestHeaders, body: card.toJson());
 
     if(response.statusCode == 200){
