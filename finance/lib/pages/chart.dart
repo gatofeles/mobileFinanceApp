@@ -16,6 +16,7 @@ class ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
     AuthBloc authBloc = context.watch<AuthBloc>();
+   
     var sum = authBloc.OrganizeByMonth();
     List<ChartData> chartData = [
       ChartData('Janeiro', sum[0]),
@@ -31,7 +32,6 @@ class ChartState extends State<Chart> {
       ChartData('Novembro', sum[10]),
       ChartData('Dezembro', sum[11]),
     ];
-
     return Scaffold(
         body: Center(
             child: Column(
@@ -43,6 +43,7 @@ class ChartState extends State<Chart> {
             child: Text('Soma por mês em R\$'),
           ),
         ),
+        DropDown(years:authBloc.GetYears()),
         Container(
             child: SfCircularChart(
               legend: Legend(isVisible: true,
@@ -71,4 +72,46 @@ class ChartData {
   ChartData(this.x, this.y);
   final String x;
   final double y;
+}
+
+class DropDown extends StatefulWidget {
+  DropDown({this.years, this.selecYear = 'Selecione', super.key});
+
+  List<String>? years;
+  String selecYear;
+  @override
+  State<DropDown> createState() => _DropDownState();
+}
+String dropdownValue = "Selecione";
+class _DropDownState extends State<DropDown> {
+ 
+  
+  @override
+  Widget build(BuildContext context) {
+
+    AuthBloc authBloc = context.watch<AuthBloc>();
+    return DropdownButton<String>(
+      value: dropdownValue,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? value) {
+        // This is called when the user selects an item.
+        setState(() {
+          dropdownValue = value!;
+          authBloc.SetSelection(value);
+        });
+      },
+      items: widget.years!.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text('Ano: '+value),
+        );
+      }).toList(),
+    );
+  }
 }

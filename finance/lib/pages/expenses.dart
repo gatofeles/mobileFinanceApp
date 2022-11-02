@@ -31,12 +31,10 @@ class ExpensesState extends State<Expenses> {
                   padding: EdgeInsets.only(right: 20.0),
                   child: GestureDetector(
                     onTap: () {
-                      authBloc.LogOut();
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const Finance()),
-                      );
+                        MaterialPageRoute(builder: (context) => Finance()),
+                      ).then((value) => setState(() {}));
                     },
                     child: Icon(
                       Icons.logout,
@@ -52,9 +50,7 @@ class ExpensesState extends State<Expenses> {
                 children: [
                   cardForm,
                   Expanded(
-                      child: GridView.count(
-                          crossAxisCount: 3,
-                          children: authBloc.state.expenses!))
+                      child: ListView(children: authBloc.state.expenses ?? [])),
                 ],
               ),
               Chart()
@@ -67,9 +63,14 @@ class ExpensesState extends State<Expenses> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.currency_exchange), label: "Gráficos"),
             ],
+            currentIndex: _currentScreen,
             onTap: (int novoItem) {
               setState(() {
-                _currentScreen = novoItem;
+                if (_currentScreen == 0) {
+                  _currentScreen = 1;
+                } else {
+                  _currentScreen = 0;
+                }
               });
             },
           )),

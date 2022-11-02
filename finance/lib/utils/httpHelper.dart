@@ -56,6 +56,20 @@ class User {
   }
 }
 
+class UserReg {
+  final String name;
+  final String email;
+  final String password;
+
+  UserReg(this.name, this.email, this.password);
+
+  factory UserReg.fromJson(Map<String, dynamic> json) {
+    return UserReg(json['name'], json['email'], json['password']);
+  }
+
+  Map<String, dynamic> toJson() => {"name": name, "email":email, "password": password};
+}
+
 class HttpHelper {
   var backEnd = "https://financeappback.herokuapp.com/";
   List<ICard> repoCards = [];
@@ -69,7 +83,9 @@ class HttpHelper {
     final response = await client.get(
         Uri.parse(backEnd + "transactions/trans/${userId}"),
         headers: requestHeaders);
-
+    if(response.body == "[]"){
+      return [];
+    }
     Map expenses = jsonDecode(response.body);
     List<ICard> cards = [];
 
@@ -87,6 +103,7 @@ class HttpHelper {
   Future<User> GetCreds(String email, String password) async {
     var creds = Creds(email, password);
 
+    var credsJson = creds.toJson();
     final response = await client.post(Uri.parse(backEnd + "users/login"),
         headers: requestHeaders, body: creds.toJson());
 
@@ -98,6 +115,21 @@ class HttpHelper {
     
     final response = await client.post(Uri.parse(backEnd + "transactions"),
         headers: requestHeaders, body: card.toJson());
+
+    if(response.statusCode == 200){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  Future<bool> CreateUser(String name, String email, String password) async {
+    
+    UserReg reg = UserReg(name, email, password);
+    var regBody = reg.toJson();
+    final response = await client.post(Uri.parse(backEnd + "users"),
+        headers: requestHeaders, body: regBody);
 
     if(response.statusCode == 200){
       return true;

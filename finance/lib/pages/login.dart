@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/authBloc.dart';
 import './expenses.dart';
+import './register.dart';
 
 class Finance extends StatefulWidget {
   const Finance({super.key});
@@ -83,7 +84,6 @@ class _FinanceForm extends State<FinanceForm> {
                             passwordValue, emailValue);
                         var result2 = await authBloc.GetExpenses();
                         if (result && result2) {
-
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -107,16 +107,12 @@ class _FinanceForm extends State<FinanceForm> {
                     height: 50,
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: ElevatedButton(
-                      child: const Text('Register'),
+                      child: const Text('Registrar'),
                       onPressed: () {
-                        setState(() {
-                          passwordValue = passwordController.text;
-                          emailValue = emailController.text;
-                        });
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Expenses()),
+                              builder: (context) => const Register()),
                         );
                       },
                     ))
