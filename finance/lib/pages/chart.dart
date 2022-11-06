@@ -1,8 +1,9 @@
-import 'package:finance/blocs/authEvents.dart';
+import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
+import 'package:finance/blocs/RestApiBloc/authEvents.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/NewAuthBloc.dart';
+
 
 
 class Chart extends StatefulWidget {

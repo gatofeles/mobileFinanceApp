@@ -1,9 +1,11 @@
-import 'package:finance/blocs/authEvents.dart';
-import 'package:finance/blocs/authStates.dart';
+
+import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
+import 'package:finance/blocs/RestApiBloc/authEvents.dart';
+import 'package:finance/blocs/RestApiBloc/authStates.dart';
 import 'package:finance/utils/httpHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/NewAuthBloc.dart';
+
 import './expenses.dart';
 import './register.dart';
 

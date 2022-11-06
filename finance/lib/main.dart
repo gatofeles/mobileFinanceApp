@@ -1,10 +1,8 @@
-import 'package:finance/blocs/authEvents.dart';
+import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
+import 'package:finance/blocs/RestApiBloc/authEvents.dart';
 import 'package:flutter/material.dart';
 import './pages/login.dart';
-import './blocs/authBloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'blocs/NewAuthBloc.dart';
 
 void main() {
   runApp(const MyApp());

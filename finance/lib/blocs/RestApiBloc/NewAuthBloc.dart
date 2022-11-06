@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:finance/blocs/authEvents.dart';
-import 'package:finance/blocs/authStates.dart';
-import '../components/card.dart';
-import '../utils/httpHelper.dart' show HttpHelper;
+import 'package:finance/blocs/RestApiBloc/authStates.dart';
+import 'package:finance/components/card.dart';
+import 'package:finance/utils/httpHelper.dart';
+import 'authEvents.dart';
 
 class NewAuthBloc extends Bloc<AuthEvents, AuthStates> {
   final httpHelper = HttpHelper();

@@ -1,7 +1,6 @@
+import 'package:finance/components/card.dart';
+import 'package:finance/utils/httpHelper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../utils/httpHelper.dart' show HttpHelper;
-import '../utils/httpHelper.dart' show ICard;
-import '../components/card.dart';
 
 enum AuthEvent { get, delete, getExpenses, createExpense }
 
@@ -83,7 +82,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       return false;
     }
   }
-
+  
   List<double> OrganizeByMonth() {
     List<double> total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     List<int> years = [];
@@ -115,13 +114,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     return years;
   }
-
     void SetSelection(String year){
     emit(AuthState(dropDownSelection: year, expenses: this.state.expenses,
           userId: this.state.userId,
           token: this.state.token,
           data: this.state.data));
   }
-
-
 }

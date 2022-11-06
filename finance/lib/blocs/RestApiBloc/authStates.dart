@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
-import '../components/card.dart';
-import '../utils/httpHelper.dart';
+import 'package:finance/components/card.dart';
+import 'package:finance/utils/httpHelper.dart';
+
 
 abstract class AuthStates extends Equatable{
   String token;

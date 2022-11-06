@@ -1,7 +1,5 @@
-
-import 'package:finance/blocs/authEvents.dart';
-
-import '../blocs/NewAuthBloc.dart';
+import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
+import 'package:finance/blocs/RestApiBloc/authEvents.dart';
 import '../utils/httpHelper.dart' show ICard;
 import 'package:flutter/material.dart';
 import '../utils/httpHelper.dart' show HttpHelper;
