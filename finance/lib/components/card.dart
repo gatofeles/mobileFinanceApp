@@ -1,8 +1,10 @@
-import 'dart:math';
+
+import 'package:finance/blocs/authEvents.dart';
+
+import '../blocs/NewAuthBloc.dart';
 import '../utils/httpHelper.dart' show ICard;
 import 'package:flutter/material.dart';
 import '../utils/httpHelper.dart' show HttpHelper;
-import '../blocs/authBloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ECard extends StatefulWidget {
@@ -30,7 +32,7 @@ class _ECardState extends State<ECard> {
 
   @override
   Widget build(BuildContext context) {
-    AuthBloc authBloc = context.watch<AuthBloc>();
+    NewAuthBloc authBloc = context.watch<NewAuthBloc>();
     return SizedBox(
       height: 100,
       child: Card(
@@ -96,12 +98,10 @@ class _ECardState extends State<ECard> {
               var result = await httpHelper.DeleteExpense(
                   widget.card!, authBloc.state.token);
               if (result) {
-                var result2 = await authBloc.GetExpenses();
-                if (result2) {
+                authBloc.add(LoadExpenses());
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Despesa Excluída com sucesso.')),
-                  );
-                }
+                  ); 
               }
             },
           )
