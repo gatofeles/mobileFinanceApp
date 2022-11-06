@@ -1,6 +1,9 @@
+import 'package:finance/blocs/authEvents.dart';
+import 'package:finance/blocs/authStates.dart';
+import 'package:finance/utils/httpHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/authBloc.dart';
+import '../blocs/NewAuthBloc.dart';
 import './expenses.dart';
 import './register.dart';
 
@@ -27,12 +30,15 @@ class _FinanceForm extends State<FinanceForm> {
   TextEditingController passwordController = TextEditingController();
   String passwordValue = 'no password';
   String emailValue = 'no email';
+  HttpHelper httpHelper = HttpHelper();
 
   Widget build(BuildContext context) {
-    AuthBloc authBloc = context.watch<AuthBloc>();
+    NewAuthBloc authBloc = context.watch<NewAuthBloc>();
     return (Scaffold(
         body: Center(
-      child: Container(
+      child: BlocBuilder<NewAuthBloc, AuthStates>(
+        bloc: authBloc,
+        builder: (context, state) =>Container(
           constraints: BoxConstraints(
               minHeight: 40, maxHeight: 350, maxWidth: 500, minWidth: 40),
           decoration: BoxDecoration(
@@ -78,12 +84,14 @@ class _FinanceForm extends State<FinanceForm> {
                         setState(() {
                           passwordValue = passwordController.text;
                           emailValue = emailController.text;
+                          
                         });
 
-                        var result = await authBloc.GetTokenId(
-                            passwordValue, emailValue);
-                        var result2 = await authBloc.GetExpenses();
-                        if (result && result2) {
+                       try {
+                         final response = await httpHelper.GetCreds(emailValue, passwordValue);
+                          if (response.userId != "" && response.token != "") {
+                          authBloc.add(AuthenticationEvent(token:response.token, userId: response.userId));
+                          authBloc.add(await LoadExpenses());
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -101,6 +109,18 @@ class _FinanceForm extends State<FinanceForm> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
+                       } catch (e) {
+                         final snackBar = SnackBar(
+                            content: const Text('Senha ou usuário incorretos!'),
+                            action: SnackBarAction(
+                              label: 'limpar',
+                              onPressed: () {
+                                // Some code to undo the change.
+                              },
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } 
                       },
                     )),
                 Container(
@@ -118,7 +138,7 @@ class _FinanceForm extends State<FinanceForm> {
                     ))
               ], mainAxisAlignment: MainAxisAlignment.center)
             ],
-          )),
+          )),) 
     )));
   }
 }

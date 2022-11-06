@@ -1,8 +1,9 @@
+import 'package:finance/blocs/authEvents.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/authBloc.dart';
+import '../blocs/NewAuthBloc.dart';
+
 
 class Chart extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
@@ -15,7 +16,8 @@ class Chart extends StatefulWidget {
 class ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
-    AuthBloc authBloc = context.watch<AuthBloc>();
+    NewAuthBloc authBloc = context.watch<NewAuthBloc>();
+    //authBloc.add(SelectYearEvent(year: authBloc.state.dropDownSelection));
    
     var sum = authBloc.OrganizeByMonth();
     List<ChartData> chartData = [
@@ -89,7 +91,7 @@ class _DropDownState extends State<DropDown> {
   @override
   Widget build(BuildContext context) {
 
-    AuthBloc authBloc = context.watch<AuthBloc>();
+    NewAuthBloc authBloc = context.watch<NewAuthBloc>();
     return DropdownButton<String>(
       value: dropdownValue,
       icon: const Icon(Icons.arrow_downward),
@@ -103,7 +105,7 @@ class _DropDownState extends State<DropDown> {
         // This is called when the user selects an item.
         setState(() {
           dropdownValue = value!;
-          authBloc.SetSelection(value);
+          authBloc.add(SelectYearEvent(year: value));
         });
       },
       items: widget.years!.map<DropdownMenuItem<String>>((String value) {

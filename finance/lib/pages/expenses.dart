@@ -1,8 +1,9 @@
-import 'package:finance/utils/httpHelper.dart';
+
+import 'package:finance/blocs/authEvents.dart';
 import 'package:flutter/material.dart';
-import '../blocs/authBloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../components/card.dart' show ECard;
+import '../blocs/NewAuthBloc.dart';
+
 import '../components/expenseForm.dart';
 import '../pages/chart.dart';
 import '../pages/login.dart';
@@ -18,7 +19,7 @@ class ExpensesState extends State<Expenses> {
   int _currentScreen = 0;
   @override
   Widget build(BuildContext context) {
-    AuthBloc authBloc = context.watch<AuthBloc>();
+    NewAuthBloc authBloc = context.watch<NewAuthBloc>()..add(LoadExpenses());
     CardForm cardForm =
         CardForm(token: authBloc.state.token, userId: authBloc.state.userId);
     return MaterialApp(

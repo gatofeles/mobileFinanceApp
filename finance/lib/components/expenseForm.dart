@@ -1,8 +1,9 @@
+import 'package:finance/blocs/authEvents.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../blocs/NewAuthBloc.dart';
 import '../utils/httpHelper.dart' show HttpHelper;
 import '../utils/httpHelper.dart' show ExpenseBody;
-import '../blocs/authBloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CardForm extends StatefulWidget {
@@ -24,7 +25,7 @@ class CardFormState extends State<CardForm> {
 
   @override
   Widget build(BuildContext context) {
-    AuthBloc authBloc = context.watch<AuthBloc>();
+    NewAuthBloc authBloc = context.watch<NewAuthBloc>();
     return Form(
       key: _formKey,
       child: Card(
@@ -86,17 +87,14 @@ class CardFormState extends State<CardForm> {
                       const SnackBar(content: Text('Processando')),
                     );
                     ExpenseBody card = ExpenseBody(titleController.text, costController.text, dateController.text, authBloc.state.userId);
-                    if(await http.CreateExpense(card, authBloc.state.token) ){
-                      var result = await authBloc.GetExpenses();
-                      var message = "algo deu errado";
-                      if(result){
-                          message = 'Despesa Criada com Sucesso!';
-                      }
+                    var result = await http.CreateExpense(card, authBloc.state.token);
+                    if(result){
+                      authBloc.add(LoadExpenses());
+                      var message = 'Despesa Criada com Sucesso!';
                       ScaffoldMessenger.of(context).showSnackBar(
                        SnackBar(content: Text(message)),
                     );
                     }
-
                     else{
                       ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Algo deu errado na criação da despesa!')),
