@@ -1,6 +1,8 @@
 
 import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
 import 'package:finance/blocs/RestApiBloc/authEvents.dart';
+import 'package:finance/blocs/SqliteBloc/expenseBloc.dart';
+import 'package:finance/blocs/SqliteBloc/expenseEvent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -28,6 +30,7 @@ class CardFormState extends State<CardForm> {
   @override
   Widget build(BuildContext context) {
     NewAuthBloc authBloc = context.watch<NewAuthBloc>();
+    ExpenseBloc expenseBloc = context.watch<ExpenseBloc>();
     return Form(
       key: _formKey,
       child: Card(
@@ -90,6 +93,8 @@ class CardFormState extends State<CardForm> {
                     );
                     ExpenseBody card = ExpenseBody(titleController.text, costController.text, dateController.text, authBloc.state.userId);
                     var result = await http.CreateExpense(card, authBloc.state.token);
+                    expenseBloc.add(AddDbExpenseEvent(expense: card));
+
                     if(result){
                       authBloc.add(LoadExpenses());
                       var message = 'Despesa Criada com Sucesso!';

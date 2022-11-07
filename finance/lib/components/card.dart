@@ -1,5 +1,7 @@
 import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
 import 'package:finance/blocs/RestApiBloc/authEvents.dart';
+import 'package:finance/blocs/SqliteBloc/expenseBloc.dart';
+import 'package:finance/blocs/SqliteBloc/expenseEvent.dart';
 import '../utils/httpHelper.dart' show ICard;
 import 'package:flutter/material.dart';
 import '../utils/httpHelper.dart' show HttpHelper;
@@ -31,6 +33,7 @@ class _ECardState extends State<ECard> {
   @override
   Widget build(BuildContext context) {
     NewAuthBloc authBloc = context.watch<NewAuthBloc>();
+    ExpenseBloc expenseBloc = context.watch<ExpenseBloc>();
     return SizedBox(
       height: 100,
       child: Card(
@@ -92,15 +95,26 @@ class _ECardState extends State<ECard> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Excluindo Despesa...')),
               );
-              var httpHelper = HttpHelper();
+              if(!authBloc.state.useDatabase){
+                var httpHelper = HttpHelper();
               var result = await httpHelper.DeleteExpense(
                   widget.card!, authBloc.state.token);
+
               if (result) {
                 authBloc.add(LoadExpenses());
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Despesa Excluída com sucesso.')),
                   ); 
               }
+              }
+              else{
+                expenseBloc.add(DeleteDbExpenseEvent(expense: widget.card!));
+                 authBloc.add(LoadExpenses());
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Despesa Excluída com sucesso.')),
+                  ); 
+              }
+              
             },
           )
         ]),

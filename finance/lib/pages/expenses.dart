@@ -2,6 +2,9 @@
 
 import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
 import 'package:finance/blocs/RestApiBloc/authEvents.dart';
+import 'package:finance/blocs/SqliteBloc/expenseBloc.dart';
+import 'package:finance/blocs/SqliteBloc/expenseEvent.dart';
+import 'package:finance/components/card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,6 +25,9 @@ class ExpensesState extends State<Expenses> {
   @override
   Widget build(BuildContext context) {
     NewAuthBloc authBloc = context.watch<NewAuthBloc>()..add(LoadExpenses());
+    ExpenseBloc expenseBloc = context.watch<ExpenseBloc>()..add(LoadExpenseEvent(userId:authBloc.state.userId));
+    List<ECard> expenses = authBloc.state.useDatabase ? expenseBloc.state.expenses?? [] :authBloc.state.expenses?? [];
+
     CardForm cardForm =
         CardForm(token: authBloc.state.token, userId: authBloc.state.userId);
     return MaterialApp(
@@ -53,7 +59,7 @@ class ExpensesState extends State<Expenses> {
                 children: [
                   cardForm,
                   Expanded(
-                      child: ListView(children: authBloc.state.expenses ?? [])),
+                      child: ListView(children: expenses)),
                 ],
               ),
               Chart()

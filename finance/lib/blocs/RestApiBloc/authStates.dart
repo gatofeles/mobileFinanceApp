@@ -10,12 +10,14 @@ abstract class AuthStates extends Equatable{
   List<ECard>? expenses;
   List<ICard>? data;
   String dropDownSelection;
+  bool useDatabase;
   AuthStates(
       {required this.token,
       required this.userId,
       required this.loged,
       required this.expenses,
       required this.data,
+      this.useDatabase = true,
       required this.dropDownSelection,});
 }
 

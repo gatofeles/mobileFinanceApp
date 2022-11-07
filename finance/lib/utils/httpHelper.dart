@@ -11,6 +11,10 @@ class ICard {
   String description;
   String date;
 
+  String get id {
+    return _id;
+  }
+
   factory ICard.fromJson(Map<String, dynamic> json) {
     return ICard(
         json['title'] as String,
