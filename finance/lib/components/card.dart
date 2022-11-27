@@ -1,10 +1,7 @@
-import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
-import 'package:finance/blocs/RestApiBloc/authEvents.dart';
-import 'package:finance/blocs/SqliteBloc/expenseBloc.dart';
-import 'package:finance/blocs/SqliteBloc/expenseEvent.dart';
-import '../utils/httpHelper.dart' show ICard;
+import 'package:finance/blocs/ExpenseBloc/expenseBloc.dart';
+import 'package:finance/blocs/ExpenseBloc/expenseEvent.dart';
+import '../blocs/model/expense.dart';
 import 'package:flutter/material.dart';
-import '../utils/httpHelper.dart' show HttpHelper;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ECard extends StatefulWidget {
@@ -12,9 +9,10 @@ class ECard extends StatefulWidget {
     super.key,
     this.card,
     this.color = const Color(0xFF006064),
+    this.id
   });
-
-  final ICard? card;
+  final String? id;
+  final Expense? card;
   final Color color;
 
   @override
@@ -32,7 +30,6 @@ class _ECardState extends State<ECard> {
 
   @override
   Widget build(BuildContext context) {
-    NewAuthBloc authBloc = context.watch<NewAuthBloc>();
     ExpenseBloc expenseBloc = context.watch<ExpenseBloc>();
     return SizedBox(
       height: 100,
@@ -91,30 +88,8 @@ class _ECardState extends State<ECard> {
                 color: Color.fromARGB(255, 215, 71, 19),
                 child: Padding(
                     padding: EdgeInsets.all(10.0), child: Text('Excluir'))),
-            onTap: () async {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Excluindo Despesa...')),
-              );
-              if(!authBloc.state.useDatabase){
-                var httpHelper = HttpHelper();
-              var result = await httpHelper.DeleteExpense(
-                  widget.card!, authBloc.state.token);
-
-              if (result) {
-                authBloc.add(LoadExpenses());
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Despesa Excluída com sucesso.')),
-                  ); 
-              }
-              }
-              else{
-                expenseBloc.add(DeleteDbExpenseEvent(expense: widget.card!));
-                 authBloc.add(LoadExpenses());
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Despesa Excluída com sucesso.')),
-                  ); 
-              }
-              
+            onTap: () async {            
+              expenseBloc.add(DeleteExpenseEvent(expenseId: widget.id!));     
             },
           )
         ]),

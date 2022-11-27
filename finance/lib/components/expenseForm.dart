@@ -1,19 +1,14 @@
-
 import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
-import 'package:finance/blocs/RestApiBloc/authEvents.dart';
-import 'package:finance/blocs/SqliteBloc/expenseBloc.dart';
-import 'package:finance/blocs/SqliteBloc/expenseEvent.dart';
+import 'package:finance/blocs/ExpenseBloc/expenseBloc.dart';
+import 'package:finance/blocs/ExpenseBloc/expenseEvent.dart';
+import 'package:finance/blocs/model/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import '../utils/httpHelper.dart' show HttpHelper;
-import '../utils/httpHelper.dart' show ExpenseBody;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CardForm extends StatefulWidget {
-   String token;
    String userId;
-   CardForm({super.key, this.token = '', this.userId = ''});
+   CardForm({super.key, this.userId = ''});
 
   @override
   CardFormState createState() {
@@ -50,6 +45,7 @@ class CardFormState extends State<CardForm> {
                 return null;
               },
             ),
+            SizedBox(height: 10),
             TextFormField(
               controller: costController,
               keyboardType: TextInputType.number,
@@ -67,6 +63,7 @@ class CardFormState extends State<CardForm> {
                 return null;
               },
             ),
+            SizedBox(height: 10),
             TextFormField(
               controller: dateController,
               keyboardType: TextInputType.datetime,
@@ -86,27 +83,13 @@ class CardFormState extends State<CardForm> {
               child: Center(
                   child: ElevatedButton(
                 onPressed: ()async  {
-                  var http = HttpHelper();
                   if (_formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Processando')),
                     );
-                    ExpenseBody card = ExpenseBody(titleController.text, costController.text, dateController.text, authBloc.state.userId);
-                    var result = await http.CreateExpense(card, authBloc.state.token);
-                    expenseBloc.add(AddDbExpenseEvent(expense: card));
+                    Expense card = Expense(titleController.text, costController.text, dateController.text);
+                    expenseBloc.add(AddExpenseEvent(expense: card));
 
-                    if(result){
-                      authBloc.add(LoadExpenses());
-                      var message = 'Despesa Criada com Sucesso!';
-                      ScaffoldMessenger.of(context).showSnackBar(
-                       SnackBar(content: Text(message)),
-                    );
-                    }
-                    else{
-                      ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Algo deu errado na criação da despesa!')),
-                    );
-                    }
                   }
                 },
                 child: const Text('Adicionar Despesa'),

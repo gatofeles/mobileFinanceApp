@@ -42,6 +42,8 @@ dependencies:
   syncfusion_flutter_charts: ^20.3.49
   equatable: ^2.0.0
   sqflite: ^2.2.0+3
+  firebase_auth: ^4.1.4
+  cloud_firestore: ^4.1.0
 
 dev_dependencies:
   flutter_test:

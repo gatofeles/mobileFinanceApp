@@ -1,64 +1,40 @@
-
-
 import 'package:equatable/equatable.dart';
 import 'package:finance/utils/httpHelper.dart';
 
-abstract class AuthEvents extends Equatable{
+abstract class AuthEvents{
   const AuthEvents();
 }
 
-class InitiateEvent extends AuthEvents {
-
-  @override
-  List<Object> get props => [];
-}
-
-class AddExpenseEvent extends AuthEvents {
-  ExpenseBody expense;
-
-  AddExpenseEvent({
-    required this.expense,
-  });
-
-  @override
-  List<Object> get props => [expense];
-}
-
-class LoadExpenses extends AuthEvents{
-    @override
-  List<Object> get props => [];
-}
-
-class RemoveExpenseEvent extends AuthEvents {
-  ICard expense;
-
-  RemoveExpenseEvent({
-    required this.expense,
-  });
-
-  @override
-  List<Object> get props => [expense];
-}
-
-class SelectYearEvent extends AuthEvents {
-  String year;
-
-  SelectYearEvent({
-    required this.year,
-  });
-
-  @override
-  List<Object> get props => [year];
-}
-
 class AuthenticationEvent extends AuthEvents {
-  String token;
-  String userId;
+  String email;
+  String password;
 
   AuthenticationEvent({
-    required this.token, required this.userId
+    required this.email, required this.password
   });
 
-   @override
-  List<Object> get props => [token, userId];
 }
+
+class RegisterEvent extends AuthEvents{
+
+}
+
+class CreateUserEvent extends AuthEvents{
+
+  String email;
+  String password;
+
+  CreateUserEvent({
+    required this.email, required this.password
+  });
+
+}
+
+class LogoutEvent extends AuthEvents{
+
+}
+
+class Refresh extends AuthEvents{
+
+}
+

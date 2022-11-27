@@ -1,6 +1,7 @@
-import 'package:finance/pages/login.dart';
+import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
+import 'package:finance/blocs/RestApiBloc/authEvents.dart';
 import 'package:flutter/material.dart';
-import '../utils/httpHelper.dart' show HttpHelper;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/radio.dart' show RadioGender;
 
 class Register extends StatefulWidget {
@@ -23,19 +24,18 @@ class RegisterForm extends StatefulWidget {
 class _RegisterForm extends State<RegisterForm> {
   @override
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController userController = TextEditingController();
-  HttpHelper httpHelper = HttpHelper();
+  TextEditingController passwordController = TextEditingController(); 
 
   Widget build(BuildContext context) {
+     NewAuthBloc authBloc = context.watch<NewAuthBloc>();
     return (Scaffold(
         appBar: AppBar(
-          title: const Text('Despesas'),
+          title: const Text('Registro de Usuário'),
         ),
         body: Center(
           child: Container(
               constraints: BoxConstraints(
-                  minHeight: 40, maxHeight: 500, maxWidth: 500, minWidth: 40),
+                  minHeight: 40, maxHeight: 400, maxWidth: 500, minWidth: 40),
               decoration: BoxDecoration(
                   color: Color.fromARGB(255, 222, 222, 222),
                   borderRadius: BorderRadius.circular(40)),
@@ -55,14 +55,6 @@ class _RegisterForm extends State<RegisterForm> {
                   ),
                   SizedBox(height: 10),
                   TextFormField(
-                    controller: userController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.password),
-                      hintText: 'Digite usuário',
-                      labelText: 'Usuário*',
-                    ),
-                  ),
-                  TextFormField(
                       controller: emailController,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.email),
@@ -77,68 +69,16 @@ class _RegisterForm extends State<RegisterForm> {
                       labelText: 'Password*',
                     ),
                   ),
-                   SizedBox(height: 10),
-                    SizedBox(height:80, child: RadioGender()),
                   SizedBox(height: 10),
                   Row(children: [
                     Container(
                         height: 50,
                         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: ElevatedButton(
-                          child: const Text('Registrar'),
+                          child: const Text('Criar Usuário'),
                           onPressed: () async {
-                             final snackBar = SnackBar(
-                                content:
-                                    const Text('Criando Usuário...'),
-                                action: SnackBarAction(
-                                  label: 'limpar',
-                                  onPressed: () {
-                                    // Some code to undo the change.
-                                  },
-                                ),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-
-                            var result = await httpHelper.CreateUser(
-                                userController.text,
-                                emailController.text,
-                                passwordController.text);
-
-                            if (result) {
-                              final snackBar = SnackBar(
-                                content:
-                                    const Text('Usuário criado com sucesso'),
-                                action: SnackBarAction(
-                                  label: 'limpar',
-                                  onPressed: () {
-                                    // Some code to undo the change.
-                                  },
-                                ),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Finance()),
-                              );
-                            } else {
-                              final snackBar = SnackBar(
-                                content:
-                                    const Text('Algo deu errado no registro.'),
-                                action: SnackBarAction(
-                                  label: 'limpar',
-                                  onPressed: () {
-                                    // Some code to undo the change.
-                                  },
-                                ),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
+                            authBloc.add(CreateUserEvent(email: emailController.text, password: passwordController.text));
                             }
-                          },
                         )),
                     Container(
                         height: 50,
@@ -146,11 +86,7 @@ class _RegisterForm extends State<RegisterForm> {
                         child: ElevatedButton(
                           child: const Text('Voltar ao Login'),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Finance()),
-                            );
+                            authBloc.add(Refresh());
                           },
                         ))
                   ], mainAxisAlignment: MainAxisAlignment.center)
