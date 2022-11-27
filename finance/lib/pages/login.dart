@@ -1,9 +1,11 @@
-import 'package:finance/blocs/authEvents.dart';
-import 'package:finance/blocs/authStates.dart';
+
+import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
+import 'package:finance/blocs/RestApiBloc/authEvents.dart';
+import 'package:finance/blocs/RestApiBloc/authStates.dart';
 import 'package:finance/utils/httpHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/NewAuthBloc.dart';
+
 import './expenses.dart';
 import './register.dart';
 
@@ -35,6 +37,9 @@ class _FinanceForm extends State<FinanceForm> {
   Widget build(BuildContext context) {
     NewAuthBloc authBloc = context.watch<NewAuthBloc>();
     return (Scaffold(
+        appBar: AppBar(
+          title: const Text('Tela de login'),
+        ),
         body: Center(
       child: BlocBuilder<NewAuthBloc, AuthStates>(
         bloc: authBloc,
@@ -86,41 +91,7 @@ class _FinanceForm extends State<FinanceForm> {
                           emailValue = emailController.text;
                           
                         });
-
-                       try {
-                         final response = await httpHelper.GetCreds(emailValue, passwordValue);
-                          if (response.userId != "" && response.token != "") {
-                          authBloc.add(AuthenticationEvent(token:response.token, userId: response.userId));
-                          authBloc.add(await LoadExpenses());
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Expenses()),
-                          );
-                        } else {
-                          final snackBar = SnackBar(
-                            content: const Text('Senha ou usuário incorretos!'),
-                            action: SnackBarAction(
-                              label: 'limpar',
-                              onPressed: () {
-                                // Some code to undo the change.
-                              },
-                            ),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                       } catch (e) {
-                         final snackBar = SnackBar(
-                            content: const Text('Senha ou usuário incorretos!'),
-                            action: SnackBarAction(
-                              label: 'limpar',
-                              onPressed: () {
-                                // Some code to undo the change.
-                              },
-                            ),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } 
+                          authBloc.add(AuthenticationEvent(email: emailValue, password: passwordValue));
                       },
                     )),
                 Container(
@@ -129,11 +100,7 @@ class _FinanceForm extends State<FinanceForm> {
                     child: ElevatedButton(
                       child: const Text('Registrar'),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Register()),
-                        );
+                        authBloc.add(RegisterEvent());
                       },
                     ))
               ], mainAxisAlignment: MainAxisAlignment.center)

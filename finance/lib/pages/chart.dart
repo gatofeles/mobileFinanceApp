@@ -1,8 +1,12 @@
-import 'package:finance/blocs/authEvents.dart';
+import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
+import 'package:finance/blocs/ExpenseBloc/expenseBloc.dart';
+import 'package:finance/blocs/ExpenseBloc/expenseEvent.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/NewAuthBloc.dart';
+
+import '../blocs/ExpenseBloc/monitorBloc.dart';
+
 
 
 class Chart extends StatefulWidget {
@@ -17,9 +21,11 @@ class ChartState extends State<Chart> {
   @override
   Widget build(BuildContext context) {
     NewAuthBloc authBloc = context.watch<NewAuthBloc>();
+    MonitorBloc monitorBloc = context.watch<MonitorBloc>();
+
     //authBloc.add(SelectYearEvent(year: authBloc.state.dropDownSelection));
    
-    var sum = authBloc.OrganizeByMonth();
+    var sum = monitorBloc.OrganizeByMonth();
     List<ChartData> chartData = [
       ChartData('Janeiro', sum[0]),
       ChartData('Fevereiro', sum[1]),
@@ -45,7 +51,7 @@ class ChartState extends State<Chart> {
             child: Text('Soma por mês em R\$'),
           ),
         ),
-        DropDown(years:authBloc.GetYears()),
+        DropDown(years:monitorBloc.GetYears()),
         Container(
             child: SfCircularChart(
               legend: Legend(isVisible: true,
@@ -91,9 +97,9 @@ class _DropDownState extends State<DropDown> {
   @override
   Widget build(BuildContext context) {
 
-    NewAuthBloc authBloc = context.watch<NewAuthBloc>();
+    MonitorBloc monitorBloc = context.watch<MonitorBloc>();
     return DropdownButton<String>(
-      value: dropdownValue,
+      value: monitorBloc.state.year,
       icon: const Icon(Icons.arrow_downward),
       elevation: 16,
       style: const TextStyle(color: Colors.deepPurple),
@@ -105,7 +111,7 @@ class _DropDownState extends State<DropDown> {
         // This is called when the user selects an item.
         setState(() {
           dropdownValue = value!;
-          authBloc.add(SelectYearEvent(year: value));
+          monitorBloc.add(SelectYearEvent(year: dropdownValue.toString()));
         });
       },
       items: widget.years!.map<DropdownMenuItem<String>>((String value) {
@@ -117,3 +123,6 @@ class _DropDownState extends State<DropDown> {
     );
   }
 }
+
+
+

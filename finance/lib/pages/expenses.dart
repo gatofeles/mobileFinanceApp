@@ -1,9 +1,9 @@
-
-import 'package:finance/blocs/authEvents.dart';
+import 'package:finance/blocs/ExpenseBloc/monitorBloc.dart';
+import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
+import 'package:finance/blocs/RestApiBloc/authEvents.dart';
+import 'package:finance/components/card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../blocs/NewAuthBloc.dart';
-
 import '../components/expenseForm.dart';
 import '../pages/chart.dart';
 import '../pages/login.dart';
@@ -19,9 +19,12 @@ class ExpensesState extends State<Expenses> {
   int _currentScreen = 0;
   @override
   Widget build(BuildContext context) {
-    NewAuthBloc authBloc = context.watch<NewAuthBloc>()..add(LoadExpenses());
+    NewAuthBloc authBloc = context.watch<NewAuthBloc>();
+    MonitorBloc monitor = context.watch<MonitorBloc>();
+    List<ECard> expenses = monitor.state.expenseCollection!.cardList;
+
     CardForm cardForm =
-        CardForm(token: authBloc.state.token, userId: authBloc.state.userId);
+        CardForm(userId: authBloc.state.userId!);
     return MaterialApp(
       title: 'Despesas',
       home: Scaffold(
@@ -32,10 +35,8 @@ class ExpensesState extends State<Expenses> {
                   padding: EdgeInsets.only(right: 20.0),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Finance()),
-                      ).then((value) => setState(() {}));
+                      authBloc.add(LogoutEvent());
+                      monitor.add(ClearForLogout());
                     },
                     child: Icon(
                       Icons.logout,
@@ -51,7 +52,7 @@ class ExpensesState extends State<Expenses> {
                 children: [
                   cardForm,
                   Expanded(
-                      child: ListView(children: authBloc.state.expenses ?? [])),
+                      child: ListView(children: expenses)),
                 ],
               ),
               Chart()
@@ -67,9 +68,11 @@ class ExpensesState extends State<Expenses> {
             currentIndex: _currentScreen,
             onTap: (int novoItem) {
               setState(() {
+               
                 if (_currentScreen == 0) {
                   _currentScreen = 1;
                 } else {
+                   monitor.add(ClearYearSelection());
                   _currentScreen = 0;
                 }
               });
