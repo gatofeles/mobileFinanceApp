@@ -33,7 +33,7 @@ class NewAuthBloc extends Bloc<AuthEvents, AuthStates> {
 
         try {
          var user = await auth.createUserWithEmailAndPassword(event.email, event.password);
-          emit(AuthSuccessState(user!.uid));
+          emit(AuthInitialState());
         } catch (e) {
           emit(AuthenticationErrorState());
         }
