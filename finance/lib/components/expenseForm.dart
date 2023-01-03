@@ -43,6 +43,9 @@ class CardFormState extends State<CardForm> {
                 if (value == null || value.isEmpty) {
                   return 'Type the title!';
                 }
+                if (value.length > 10) {
+                  return 'Title size is up to 10 chars';
+                }
                 return null;
               },
             ),
