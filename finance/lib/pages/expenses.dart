@@ -27,6 +27,7 @@ class ExpensesState extends State<Expenses> {
     return MaterialApp(
       title: 'Expenses',
       home: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: const Text('Expenses'),
             actions: <Widget>[
