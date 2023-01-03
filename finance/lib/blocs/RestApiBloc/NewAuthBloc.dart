@@ -14,7 +14,8 @@ class NewAuthBloc extends Bloc<AuthEvents, AuthStates> {
     // _inputClientController.stream.listen(_mapEventToState);
     on<AuthenticationEvent>((event, emit) async {
       try {
-        var result = await auth.signInWithEmailAndPassword(event.email, event.password);
+        var result =
+            await auth.signInWithEmailAndPassword(event.email, event.password);
 
         if (result != null) {
           FirestoreDatabase.helper.uid = result.uid;
@@ -30,13 +31,13 @@ class NewAuthBloc extends Bloc<AuthEvents, AuthStates> {
     on<RegisterEvent>((event, emit) => emit(RegisterState()));
 
     on<CreateUserEvent>(((event, emit) async {
-
-        try {
-         var user = await auth.createUserWithEmailAndPassword(event.email, event.password);
-          emit(AuthInitialState());
-        } catch (e) {
-          emit(AuthenticationErrorState());
-        }
+      try {
+        var user = await auth.createUserWithEmailAndPassword(
+            event.email, event.password);
+        emit(AuthInitialState());
+      } catch (e) {
+        emit(AuthenticationErrorState());
+      }
     }));
 
     on<LogoutEvent>(((event, emit) async {

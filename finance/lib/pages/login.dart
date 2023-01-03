@@ -1,13 +1,9 @@
-
 import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
 import 'package:finance/blocs/RestApiBloc/authEvents.dart';
 import 'package:finance/blocs/RestApiBloc/authStates.dart';
 import 'package:finance/utils/httpHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import './expenses.dart';
-import './register.dart';
 
 class Finance extends StatefulWidget {
   const Finance({super.key});
@@ -38,74 +34,76 @@ class _FinanceForm extends State<FinanceForm> {
     NewAuthBloc authBloc = context.watch<NewAuthBloc>();
     return (Scaffold(
         appBar: AppBar(
-          title: const Text('Tela de login'),
+          title: const Text('Login Screen'),
         ),
         body: Center(
-      child: BlocBuilder<NewAuthBloc, AuthStates>(
-        bloc: authBloc,
-        builder: (context, state) =>Container(
-          constraints: BoxConstraints(
-              minHeight: 40, maxHeight: 350, maxWidth: 500, minWidth: 40),
-          decoration: BoxDecoration(
-              color: Color.fromARGB(255, 222, 222, 222),
-              borderRadius: BorderRadius.circular(40)),
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Row(
+            child: BlocBuilder<NewAuthBloc, AuthStates>(
+          bloc: authBloc,
+          builder: (context, state) => Container(
+              constraints: BoxConstraints(
+                  minHeight: 40, maxHeight: 350, maxWidth: 500, minWidth: 40),
+              decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 222, 222, 222),
+                  borderRadius: BorderRadius.circular(40)),
+              padding: const EdgeInsets.all(10),
+              child: Column(
                 children: [
-                  Icon(Icons.calculate_sharp, size: 50),
-                  Text(
-                    'Finance App',
-                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-                  )
+                  Row(
+                    children: [
+                      Icon(Icons.calculate_sharp, size: 50),
+                      Text(
+                        'Finance App',
+                        style: TextStyle(
+                            fontSize: 35, fontWeight: FontWeight.bold),
+                      )
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  ),
+                  SizedBox(height: 10),
+                  TextFormField(
+                      controller: emailController,
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.email),
+                        hintText: 'Type your email',
+                        labelText: 'Email *',
+                      )),
+                  TextFormField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.password),
+                      hintText: 'Type your password',
+                      labelText: 'Password *',
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Row(children: [
+                    Container(
+                        height: 50,
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: ElevatedButton(
+                          child: const Text('Login'),
+                          onPressed: () async {
+                            setState(() {
+                              passwordValue = passwordController.text;
+                              emailValue = emailController.text;
+                            });
+                            authBloc.add(AuthenticationEvent(
+                                email: emailValue, password: passwordValue));
+                          },
+                        )),
+                    Container(
+                        height: 50,
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: ElevatedButton(
+                          child: const Text('Register'),
+                          onPressed: () {
+                            authBloc.add(RegisterEvent());
+                          },
+                        ))
+                  ], mainAxisAlignment: MainAxisAlignment.center)
                 ],
-                mainAxisAlignment: MainAxisAlignment.center,
-              ),
-              SizedBox(height: 10),
-              TextFormField(
-                  controller: emailController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.email),
-                    hintText: 'Digite o email',
-                    labelText: 'Email *',
-                  )),
-              TextFormField(
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.password),
-                  hintText: 'Digite a senha',
-                  labelText: 'Password*',
-                ),
-              ),
-              SizedBox(height: 10),
-              Row(children: [
-                Container(
-                    height: 50,
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: ElevatedButton(
-                      child: const Text('Login'),
-                      onPressed: () async {
-                        setState(() {
-                          passwordValue = passwordController.text;
-                          emailValue = emailController.text;
-                          
-                        });
-                          authBloc.add(AuthenticationEvent(email: emailValue, password: passwordValue));
-                      },
-                    )),
-                Container(
-                    height: 50,
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: ElevatedButton(
-                      child: const Text('Registrar'),
-                      onPressed: () {
-                        authBloc.add(RegisterEvent());
-                      },
-                    ))
-              ], mainAxisAlignment: MainAxisAlignment.center)
-            ],
-          )),) 
-    )));
+              )),
+        ))));
   }
 }

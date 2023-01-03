@@ -1,16 +1,21 @@
 import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
-import 'package:finance/blocs/RestApiBloc/authEvents.dart';
 import 'package:finance/blocs/ExpenseBloc/expenseBloc.dart';
 import 'package:finance/pages/wrapper.dart';
 import 'package:flutter/material.dart';
-import './pages/login.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'blocs/ExpenseBloc/monitorBloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyCbQ2jbTPjfbFbA3i6jcQbWkSLanrh3cnc",
+          authDomain: "economicat-b4841.firebaseapp.com",
+          projectId: "economicat-b4841",
+          storageBucket: "economicat-b4841.appspot.com",
+          messagingSenderId: "852238461614",
+          appId: "1:852238461614:web:dd7c6bea08611ddb459b3f"));
   runApp(const MyApp());
 }
 

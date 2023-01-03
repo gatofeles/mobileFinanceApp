@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CardForm extends StatefulWidget {
-   String userId;
-   CardForm({super.key, this.userId = ''});
+  String userId;
+  CardForm({super.key, this.userId = ''});
 
   @override
   CardFormState createState() {
@@ -26,6 +26,7 @@ class CardFormState extends State<CardForm> {
   Widget build(BuildContext context) {
     NewAuthBloc authBloc = context.watch<NewAuthBloc>();
     ExpenseBloc expenseBloc = context.watch<ExpenseBloc>();
+    var regExp = RegExp('[0-9]{2}/[0-9]{2}/[0-9]{4}');
     return Form(
       key: _formKey,
       child: Card(
@@ -36,11 +37,11 @@ class CardFormState extends State<CardForm> {
               controller: titleController,
               decoration: InputDecoration(
                   icon: Icon(Icons.text_fields), //icon of text field
-                  labelText: 'Digite o título' //label text of field
+                  labelText: 'Type the title' //label text of field
                   ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Digite o título';
+                  return 'Type the title!';
                 }
                 return null;
               },
@@ -54,11 +55,11 @@ class CardFormState extends State<CardForm> {
               ],
               decoration: InputDecoration(
                   icon: Icon(Icons.money_off_rounded), //icon of text field
-                  labelText: 'Digite o custo' //label text of field
+                  labelText: 'Type the cost' //label text of field
                   ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Digite o custo';
+                  return 'Type the cost!';
                 }
                 return null;
               },
@@ -69,11 +70,22 @@ class CardFormState extends State<CardForm> {
               keyboardType: TextInputType.datetime,
               decoration: InputDecoration(
                   icon: Icon(Icons.date_range), //icon of text field
-                  labelText: 'Digite a data' //label text of field
+                  labelText: 'Type the date' //label text of field
                   ),
               validator: (value) {
+                if (!regExp.hasMatch(value.toString())) {
+                  return 'Use  dd/mm/yyyy format';
+                }
+                var splitedDate = value!.split('/');
+                if (int.parse(splitedDate[0]) > 31 ||
+                    int.parse(splitedDate[1]) > 12 ||
+                    int.parse(splitedDate[0]) <= 0 ||
+                    int.parse(splitedDate[1]) <= 0) {
+                  return 'Use  dd/mm/yyyy format';
+                }
+
                 if (value == null || value.isEmpty) {
-                  return 'Escolha a data';
+                  return 'Type the date!';
                 }
                 return null;
               },
@@ -82,17 +94,17 @@ class CardFormState extends State<CardForm> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Center(
                   child: ElevatedButton(
-                onPressed: ()async  {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Processando')),
+                      const SnackBar(content: Text('Creating Expense')),
                     );
-                    Expense card = Expense(titleController.text, costController.text, dateController.text);
+                    Expense card = Expense(titleController.text,
+                        costController.text, dateController.text);
                     expenseBloc.add(AddExpenseEvent(expense: card));
-
                   }
                 },
-                child: const Text('Adicionar Despesa'),
+                child: const Text('Add Expense'),
               )),
             ),
           ],

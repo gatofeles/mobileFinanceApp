@@ -17,7 +17,6 @@ class Wrapper extends StatefulWidget {
   }
 }
 
-
 class WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
@@ -29,8 +28,8 @@ class WrapperState extends State<Wrapper> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text("Erro de Autenticação"),
-                  content: Text("Algo deu errado"),
+                  title: const Text("Authentication Error"),
+                  content: Text("Something went wrong."),
                 );
               });
         }
@@ -41,8 +40,7 @@ class WrapperState extends State<Wrapper> {
         } else if (state is AuthSuccessState) {
           monitor.add(AskNewList());
           return Expenses();
-        }
-        else{
+        } else {
           return Finance();
         }
       },

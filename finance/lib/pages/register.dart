@@ -24,13 +24,13 @@ class RegisterForm extends StatefulWidget {
 class _RegisterForm extends State<RegisterForm> {
   @override
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController(); 
+  TextEditingController passwordController = TextEditingController();
 
   Widget build(BuildContext context) {
-     NewAuthBloc authBloc = context.watch<NewAuthBloc>();
+    NewAuthBloc authBloc = context.watch<NewAuthBloc>();
     return (Scaffold(
         appBar: AppBar(
-          title: const Text('Registro de Usuário'),
+          title: const Text('Register'),
         ),
         body: Center(
           child: Container(
@@ -58,14 +58,16 @@ class _RegisterForm extends State<RegisterForm> {
                       controller: emailController,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.email),
-                        hintText: 'Digite o email',
+                        hintText: 'Type your email',
                         labelText: 'Email*',
                       )),
                   TextFormField(
                     controller: passwordController,
+                    obscureText: true,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.password),
-                      hintText: 'Digite a senha',
+                      hintText:
+                          'Type your password (Should be at least 6 chars)',
                       labelText: 'Password*',
                     ),
                   ),
@@ -75,16 +77,17 @@ class _RegisterForm extends State<RegisterForm> {
                         height: 50,
                         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: ElevatedButton(
-                          child: const Text('Criar Usuário'),
-                          onPressed: () async {
-                            authBloc.add(CreateUserEvent(email: emailController.text, password: passwordController.text));
-                            }
-                        )),
+                            child: const Text('Create User'),
+                            onPressed: () async {
+                              authBloc.add(CreateUserEvent(
+                                  email: emailController.text,
+                                  password: passwordController.text));
+                            })),
                     Container(
                         height: 50,
                         padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                         child: ElevatedButton(
-                          child: const Text('Voltar ao Login'),
+                          child: const Text('Back to Login'),
                           onPressed: () {
                             authBloc.add(Refresh());
                           },

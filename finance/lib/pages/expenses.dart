@@ -23,13 +23,12 @@ class ExpensesState extends State<Expenses> {
     MonitorBloc monitor = context.watch<MonitorBloc>();
     List<ECard> expenses = monitor.state.expenseCollection!.cardList;
 
-    CardForm cardForm =
-        CardForm(userId: authBloc.state.userId!);
+    CardForm cardForm = CardForm(userId: authBloc.state.userId!);
     return MaterialApp(
-      title: 'Despesas',
+      title: 'Expenses',
       home: Scaffold(
           appBar: AppBar(
-            title: const Text('Despesas'),
+            title: const Text('Expenses'),
             actions: <Widget>[
               Padding(
                   padding: EdgeInsets.only(right: 20.0),
@@ -51,8 +50,7 @@ class ExpensesState extends State<Expenses> {
               Column(
                 children: [
                   cardForm,
-                  Expanded(
-                      child: ListView(children: expenses)),
+                  Expanded(child: ListView(children: expenses)),
                 ],
               ),
               Chart()
@@ -61,18 +59,17 @@ class ExpensesState extends State<Expenses> {
           bottomNavigationBar: BottomNavigationBar(
             items: const [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.money_sharp), label: "Despesas"),
+                  icon: Icon(Icons.money_sharp), label: "Expenses"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.currency_exchange), label: "Gráficos"),
+                  icon: Icon(Icons.currency_exchange), label: "Charts"),
             ],
             currentIndex: _currentScreen,
             onTap: (int novoItem) {
               setState(() {
-               
                 if (_currentScreen == 0) {
                   _currentScreen = 1;
                 } else {
-                   monitor.add(ClearYearSelection());
+                  monitor.add(ClearYearSelection());
                   _currentScreen = 0;
                 }
               });

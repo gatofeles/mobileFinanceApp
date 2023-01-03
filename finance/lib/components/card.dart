@@ -5,12 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ECard extends StatefulWidget {
-  const ECard({
-    super.key,
-    this.card,
-    this.color = const Color(0xFF006064),
-    this.id
-  });
+  const ECard(
+      {super.key, this.card, this.color = const Color(0xFF006064), this.id});
   final String? id;
   final Expense? card;
   final Color color;
@@ -43,7 +39,7 @@ class _ECardState extends State<ECard> {
                   Card(
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text("Título",
+                        child: Text("Title",
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                       color: Color.fromARGB(255, 194, 194, 194)),
@@ -61,35 +57,42 @@ class _ECardState extends State<ECard> {
                   Card(
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text("Custo",
+                        child: Text("Cost",
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                       color: Color.fromARGB(255, 194, 194, 194)),
                   Padding(
                       padding: EdgeInsets.all(10.0),
                       child: Text(
-                        "R\$ " + widget.card!.cost,
+                        "\$ " + widget.card!.cost,
                       ))
                 ],
               )),
           Card(
               color: Color(0xff708995),
-              child:Column(children: [Card(child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text("Data", style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              color: Color.fromARGB(255, 194, 194, 194)), Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    widget.card!.date,
-                  ))],) ),
+              child: Column(
+                children: [
+                  Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text("Date",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                      color: Color.fromARGB(255, 194, 194, 194)),
+                  Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        widget.card!.date,
+                      ))
+                ],
+              )),
           InkWell(
             child: Card(
                 color: Color.fromARGB(255, 215, 71, 19),
                 child: Padding(
-                    padding: EdgeInsets.all(10.0), child: Text('Excluir'))),
-            onTap: () async {            
-              expenseBloc.add(DeleteExpenseEvent(expenseId: widget.id!));     
+                    padding: EdgeInsets.all(10.0), child: Text('Remove'))),
+            onTap: () async {
+              expenseBloc.add(DeleteExpenseEvent(expenseId: widget.id!));
             },
           )
         ]),

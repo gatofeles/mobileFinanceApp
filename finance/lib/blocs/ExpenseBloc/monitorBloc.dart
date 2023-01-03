@@ -6,11 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../components/card.dart';
 import '../../utils/expensesRepo.dart';
 
-
 class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
   ExpenseCollection expenseCollection = ExpenseCollection();
 
-  MonitorBloc() : super(LoadedMonitorState(expenseCollection: ExpenseCollection(), year: 'Selecione')) {
+  MonitorBloc()
+      : super(LoadedMonitorState(
+            expenseCollection: ExpenseCollection(), year: 'Select')) {
     FirestoreDatabase.helper.stream.listen((event) {
       expenseCollection = event;
       add(UpdateList());
@@ -18,23 +19,28 @@ class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
 
     on<AskNewList>((event, emit) async {
       expenseCollection = await FirestoreDatabase.helper.getExpenseList();
-      emit(LoadedMonitorState(expenseCollection: expenseCollection, year: state.year));
+      emit(LoadedMonitorState(
+          expenseCollection: expenseCollection, year: state.year));
     });
 
     on<UpdateList>((event, emit) {
-      emit(LoadedMonitorState(expenseCollection: expenseCollection, year: state.year));
+      emit(LoadedMonitorState(
+          expenseCollection: expenseCollection, year: state.year));
     });
 
     on<SelectYearEvent>(((event, emit) {
-      emit(SelectYearState(expenseCollection: state.expenseCollection,year: event.year));
+      emit(SelectYearState(
+          expenseCollection: state.expenseCollection, year: event.year));
     }));
 
     on<ClearYearSelection>((event, emit) {
-      emit(LoadedMonitorState(expenseCollection: state.expenseCollection, year: 'Selecione'));
+      emit(LoadedMonitorState(
+          expenseCollection: state.expenseCollection, year: 'Select'));
     });
 
     on<ClearForLogout>((event, emit) {
-      emit(LoadedMonitorState(expenseCollection: ExpenseCollection(), year: 'Selecione'));
+      emit(LoadedMonitorState(
+          expenseCollection: ExpenseCollection(), year: 'Select'));
     });
 
     add(AskNewList());
@@ -44,15 +50,14 @@ class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
     List<double> total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     List<int> years = [];
 
-    if (this.state.year != 'Selecione') {
+    if (this.state.year != 'Select') {
       this.state.expenseCollection!.cardList.forEach((element) {
         var month = int.parse(element.card!.date.split('/')[1]);
         var year = element.card!.date.split('/')[2];
         var cost = double.parse(element.card!.cost);
-        if(this.state.year == year){
-            total[month - 1] += cost;   
+        if (this.state.year == year) {
+          total[month - 1] += cost;
         }
-        
       });
     }
 
@@ -61,7 +66,7 @@ class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
 
   List<String> GetYears() {
     List<String> years = [];
-    years.add("Selecione");
+    years.add("Select");
     this.state.expenseCollection!.cardList.forEach((element) {
       var year = element.card!.date.split('/')[2];
       if (!years.contains(year)) {
@@ -86,7 +91,7 @@ class ClearYearSelection extends MonitorEvent {}
 
 class ClearForLogout extends MonitorEvent {}
 
-class SelectYearEvent extends MonitorEvent{
+class SelectYearEvent extends MonitorEvent {
   String year;
 
   SelectYearEvent({
@@ -98,16 +103,20 @@ class SelectYearEvent extends MonitorEvent{
 Estados
 */
 
-abstract class MonitorState{
+abstract class MonitorState {
   ExpenseCollection expenseCollection;
   String year;
   MonitorState({required this.expenseCollection, required this.year});
 }
-class LoadedMonitorState extends MonitorState {
 
-  LoadedMonitorState({required ExpenseCollection expenseCollection, required String year}):super(expenseCollection: expenseCollection, year: year);
+class LoadedMonitorState extends MonitorState {
+  LoadedMonitorState(
+      {required ExpenseCollection expenseCollection, required String year})
+      : super(expenseCollection: expenseCollection, year: year);
 }
 
-class SelectYearState extends MonitorState{
-  SelectYearState({required ExpenseCollection expenseCollection, required String year}):super(expenseCollection: expenseCollection, year: year);
+class SelectYearState extends MonitorState {
+  SelectYearState(
+      {required ExpenseCollection expenseCollection, required String year})
+      : super(expenseCollection: expenseCollection, year: year);
 }

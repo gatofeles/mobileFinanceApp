@@ -7,8 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/ExpenseBloc/monitorBloc.dart';
 
-
-
 class Chart extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
   Chart({Key? key}) : super(key: key);
@@ -24,53 +22,50 @@ class ChartState extends State<Chart> {
     MonitorBloc monitorBloc = context.watch<MonitorBloc>();
 
     //authBloc.add(SelectYearEvent(year: authBloc.state.dropDownSelection));
-   
+
     var sum = monitorBloc.OrganizeByMonth();
     List<ChartData> chartData = [
-      ChartData('Janeiro', sum[0]),
-      ChartData('Fevereiro', sum[1]),
-      ChartData('Março', sum[2]),
-      ChartData('Abril', sum[3]),
-      ChartData('Maio', sum[4]),
-      ChartData('Junho', sum[5]),
-      ChartData('Julho', sum[6]),
-      ChartData('Agosto', sum[7]),
-      ChartData('Setembro', sum[8]),
-      ChartData('Outubro', sum[9]),
-      ChartData('Novembro', sum[10]),
-      ChartData('Dezembro', sum[11]),
+      ChartData('Jan', sum[0]),
+      ChartData('Feb', sum[1]),
+      ChartData('Mar', sum[2]),
+      ChartData('Apr', sum[3]),
+      ChartData('May', sum[4]),
+      ChartData('Jun', sum[5]),
+      ChartData('Jul', sum[6]),
+      ChartData('Aug', sum[7]),
+      ChartData('Sep', sum[8]),
+      ChartData('Oct', sum[9]),
+      ChartData('Nov', sum[10]),
+      ChartData('Dec', sum[11]),
     ];
     return Scaffold(
         body: Center(
             child: Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Card(
-            color: Colors.blue[200],
-            child: Text('Soma por mês em R\$'),
+        Card(
+            child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            child: Text('Sum by month in \$'),
           ),
-        ),
-        DropDown(years:monitorBloc.GetYears()),
+        )),
+        DropDown(years: monitorBloc.GetYears()),
         Container(
             child: SfCircularChart(
-              legend: Legend(isVisible: true,
-              overflowMode: LegendItemOverflowMode.wrap,
-              position: LegendPosition.bottom),
-              
-              series: <CircularSeries>[
-              
-          DoughnutSeries<ChartData, String>(
-              dataSource: chartData,
-              xValueMapper: (ChartData data, _) => data.x,
-              yValueMapper: (ChartData data, _) => data.y,
-              // Radius of doughnut's inner circle
-              innerRadius: '50%',
-               dataLabelSettings: DataLabelSettings(
-                                    showZeroValue : false, 
-                                    isVisible: true
-                                )),
-        ])),
+                legend: Legend(
+                    isVisible: true,
+                    overflowMode: LegendItemOverflowMode.wrap,
+                    position: LegendPosition.bottom),
+                series: <CircularSeries>[
+              DoughnutSeries<ChartData, String>(
+                  dataSource: chartData,
+                  xValueMapper: (ChartData data, _) => data.x,
+                  yValueMapper: (ChartData data, _) => data.y,
+                  // Radius of doughnut's inner circle
+                  innerRadius: '50%',
+                  dataLabelSettings:
+                      DataLabelSettings(showZeroValue: false, isVisible: true)),
+            ])),
       ],
     )));
   }
@@ -83,20 +78,19 @@ class ChartData {
 }
 
 class DropDown extends StatefulWidget {
-  DropDown({this.years, this.selecYear = 'Selecione', super.key});
+  DropDown({this.years, this.selecYear = 'Select', super.key});
 
   List<String>? years;
   String selecYear;
   @override
   State<DropDown> createState() => _DropDownState();
 }
-String dropdownValue = "Selecione";
+
+String dropdownValue = "Select";
+
 class _DropDownState extends State<DropDown> {
- 
-  
   @override
   Widget build(BuildContext context) {
-
     MonitorBloc monitorBloc = context.watch<MonitorBloc>();
     return DropdownButton<String>(
       value: monitorBloc.state.year,
@@ -117,12 +111,9 @@ class _DropDownState extends State<DropDown> {
       items: widget.years!.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Text('Ano: '+value),
+          child: Text('Year: ' + value),
         );
       }).toList(),
     );
   }
 }
-
-
-
