@@ -27,3 +27,5 @@ class LoadExpenseEvent extends ExpenseEvent {
 }
 
 class ShowFormEvent extends ExpenseEvent {}
+
+class BackToListEvent extends ExpenseEvent {}

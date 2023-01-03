@@ -94,7 +94,7 @@ class CardFormState extends State<CardForm> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
               child: Center(
                   child: ElevatedButton(
                 onPressed: () async {
@@ -110,6 +110,16 @@ class CardFormState extends State<CardForm> {
                 child: const Text('Add Expense'),
               )),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: Center(
+                  child: ElevatedButton(
+                onPressed: () async {
+                  expenseBloc.add(BackToListEvent());
+                },
+                child: const Text('Back to List'),
+              )),
+            )
           ],
         ),
       ),

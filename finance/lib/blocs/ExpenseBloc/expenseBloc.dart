@@ -18,5 +18,9 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     on<ShowFormEvent>((event, emit) async {
       emit(ExpenseFormState());
     });
+
+    on<BackToListEvent>((event, emit) async {
+      emit(ExpenseInitialState());
+    });
   }
 }

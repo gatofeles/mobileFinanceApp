@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/expenseForm.dart';
 import '../pages/chart.dart';
-import '../pages/login.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({Key? key}) : super(key: key);
@@ -47,12 +46,7 @@ class ExpensesState extends State<Expenses> {
           ),
           body: IndexedStack(
             index: _currentScreen,
-            children: [
-              Column(
-                children: [cardForm],
-              ),
-              Chart()
-            ],
+            children: [cardForm, Chart()],
           ),
           bottomNavigationBar: BottomNavigationBar(
             items: const [

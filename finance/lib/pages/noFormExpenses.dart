@@ -51,11 +51,12 @@ class NoFormExpensesState extends State<NoFormExpenses> {
             children: [
               Column(
                 children: [
+                  SizedBox(height: 10),
                   Container(
                       height: 50,
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: FloatingActionButton(
-                          child: const Icon(Icons.add_rounded),
+                      child: ElevatedButton(
+                          child: Text('Add Expense'),
                           onPressed: () {
                             expenseBloc.add(ShowFormEvent());
                           })),
