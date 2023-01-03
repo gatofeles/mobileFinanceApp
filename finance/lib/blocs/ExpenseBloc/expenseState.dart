@@ -4,34 +4,13 @@ import 'package:finance/components/card.dart';
 import 'package:finance/utils/httpHelper.dart';
 
 abstract class ExpenseState {
-  List<ECard>? expenses;
-  List<ICard>? data;
-  String? userId;
-  String? year = "Select";
-
-  ExpenseState({this.userId, this.expenses, this.data, this.year});
+  ExpenseState();
 }
 
-class ExpenseInitialState extends ExpenseState {
-  ExpenseInitialState() : super(userId: "", expenses: [], data: []);
-}
+class ExpenseInitialState extends ExpenseState {}
 
-class SetUserState extends ExpenseState {
-  SetUserState(
-      {required List<ICard> data,
-      required List<ECard> expenses,
-      required String userId})
-      : super(userId: userId, expenses: expenses, data: data);
-}
+class ExpenseFormState extends ExpenseState {}
 
-class LoadExpenseState extends ExpenseState {
-  LoadExpenseState(
-      {required List<ICard> data,
-      required List<ECard> expenses,
-      required String userId})
-      : super(userId: userId, expenses: expenses, data: data);
-}
+class ExpenseAddedState extends ExpenseState {}
 
-class SelectYearState extends ExpenseState {
-  SelectYearState(String year) : super(year: year);
-}
+class ExpenseErrorState extends ExpenseState {}

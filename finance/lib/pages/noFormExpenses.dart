@@ -1,3 +1,5 @@
+import 'package:finance/blocs/ExpenseBloc/expenseBloc.dart';
+import 'package:finance/blocs/ExpenseBloc/expenseEvent.dart';
 import 'package:finance/blocs/ExpenseBloc/monitorBloc.dart';
 import 'package:finance/blocs/RestApiBloc/NewAuthBloc.dart';
 import 'package:finance/blocs/RestApiBloc/authEvents.dart';
@@ -6,23 +8,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../components/expenseForm.dart';
 import '../pages/chart.dart';
-import '../pages/login.dart';
 
-class Expenses extends StatefulWidget {
-  const Expenses({Key? key}) : super(key: key);
+class NoFormExpenses extends StatefulWidget {
+  const NoFormExpenses({Key? key}) : super(key: key);
 
   @override
-  State<Expenses> createState() => ExpensesState();
+  State<NoFormExpenses> createState() => NoFormExpensesState();
 }
 
-class ExpensesState extends State<Expenses> {
+class NoFormExpensesState extends State<NoFormExpenses> {
   int _currentScreen = 0;
   @override
   Widget build(BuildContext context) {
     NewAuthBloc authBloc = context.watch<NewAuthBloc>();
+    ExpenseBloc expenseBloc = context.watch<ExpenseBloc>();
     MonitorBloc monitor = context.watch<MonitorBloc>();
     List<ECard> expenses = monitor.state.expenseCollection!.cardList;
-    CardForm cardForm = CardForm(userId: authBloc.state.userId!);
 
     return MaterialApp(
       title: 'Expenses',
@@ -49,7 +50,17 @@ class ExpensesState extends State<Expenses> {
             index: _currentScreen,
             children: [
               Column(
-                children: [cardForm],
+                children: [
+                  Container(
+                      height: 50,
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: FloatingActionButton(
+                          child: const Icon(Icons.add_rounded),
+                          onPressed: () {
+                            expenseBloc.add(ShowFormEvent());
+                          })),
+                  Expanded(child: ListView(children: expenses)),
+                ],
               ),
               Chart()
             ],

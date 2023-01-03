@@ -7,19 +7,15 @@ abstract class ExpenseEvent {
 class AddExpenseEvent extends ExpenseEvent {
   Expense expense;
 
-  AddExpenseEvent({
-    required this.expense
-  });
-
+  AddExpenseEvent({required this.expense});
 }
 
 class DeleteExpenseEvent extends ExpenseEvent {
   String expenseId;
 
   DeleteExpenseEvent({
-    required this. expenseId,
+    required this.expenseId,
   });
-
 }
 
 class LoadExpenseEvent extends ExpenseEvent {
@@ -28,7 +24,6 @@ class LoadExpenseEvent extends ExpenseEvent {
   LoadExpenseEvent({
     required this.userId,
   });
-
 }
 
-
+class ShowFormEvent extends ExpenseEvent {}

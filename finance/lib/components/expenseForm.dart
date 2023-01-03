@@ -49,12 +49,12 @@ class CardFormState extends State<CardForm> {
             SizedBox(height: 10),
             TextFormField(
               controller: costController,
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp("[. 0-9]"))
               ],
               decoration: InputDecoration(
-                  icon: Icon(Icons.money_off_rounded), //icon of text field
+                  icon: Icon(Icons.money), //icon of text field
                   labelText: 'Type the cost' //label text of field
                   ),
               validator: (value) {
