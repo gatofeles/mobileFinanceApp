@@ -41,7 +41,7 @@ class _FinanceForm extends State<FinanceForm> {
           bloc: authBloc,
           builder: (context, state) => Container(
               constraints: BoxConstraints(
-                  minHeight: 40, maxHeight: 350, maxWidth: 500, minWidth: 40),
+                  minHeight: 40, maxHeight: 300, maxWidth: 450, minWidth: 40),
               decoration: BoxDecoration(
                   color: Color.fromARGB(255, 222, 222, 222),
                   borderRadius: BorderRadius.circular(40)),

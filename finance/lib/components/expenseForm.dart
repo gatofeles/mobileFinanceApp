@@ -43,18 +43,21 @@ class CardFormState extends State<CardForm> {
                 if (value == null || value.isEmpty) {
                   return 'Type the title!';
                 }
+                if (value.length > 10) {
+                  return 'Title size is up to 10 chars';
+                }
                 return null;
               },
             ),
             SizedBox(height: 10),
             TextFormField(
               controller: costController,
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp("[. 0-9]"))
               ],
               decoration: InputDecoration(
-                  icon: Icon(Icons.money_off_rounded), //icon of text field
+                  icon: Icon(Icons.money), //icon of text field
                   labelText: 'Type the cost' //label text of field
                   ),
               validator: (value) {
@@ -91,7 +94,7 @@ class CardFormState extends State<CardForm> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
               child: Center(
                   child: ElevatedButton(
                 onPressed: () async {
@@ -107,6 +110,16 @@ class CardFormState extends State<CardForm> {
                 child: const Text('Add Expense'),
               )),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: Center(
+                  child: ElevatedButton(
+                onPressed: () async {
+                  expenseBloc.add(BackToListEvent());
+                },
+                child: const Text('Back to List'),
+              )),
+            )
           ],
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:finance/blocs/ExpenseBloc/monitorBloc.dart';
 import 'package:finance/blocs/RestApiBloc/authStates.dart';
-import 'package:finance/pages/expenses.dart';
+import 'package:finance/pages/expensesWrapper.dart';
 import 'package:finance/pages/login.dart';
 import 'package:finance/pages/register.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +39,7 @@ class WrapperState extends State<Wrapper> {
           return Register();
         } else if (state is AuthSuccessState) {
           monitor.add(AskNewList());
-          return Expenses();
+          return ExpensesWrapper();
         } else {
           return Finance();
         }

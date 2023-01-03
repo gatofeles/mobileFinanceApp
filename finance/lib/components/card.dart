@@ -90,7 +90,8 @@ class _ECardState extends State<ECard> {
             child: Card(
                 color: Color.fromARGB(255, 215, 71, 19),
                 child: Padding(
-                    padding: EdgeInsets.all(10.0), child: Text('Remove'))),
+                    padding: EdgeInsets.all(10.0),
+                    child: Icon(Icons.remove_circle_outline_outlined))),
             onTap: () async {
               expenseBloc.add(DeleteExpenseEvent(expenseId: widget.id!));
             },
